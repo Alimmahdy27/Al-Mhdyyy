@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Peduli Kanker - Info & Pengingat Obat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #495057;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: #6B73FF;
+            color: white;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-card h2 {
+            color: #000DFF;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .info-card h3 {
+            color: #495057;
+            margin: 20px 0 10px;
+        }
+
+        .info-card ul {
+            list-style-position: inside;
+            margin-left: 20px;
+        }
+
+        .info-card li {
+            margin: 10px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .nutrition-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .nutrition-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .nutrition-item img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .nutrition-item h4 {
+            color: #000DFF;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .nutrition-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .alarm-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+
+        .alarm-form {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: 2px solid #fff;
+        }
+
+        .btn {
+            background: white;
+            color: #f5576c;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .alarm-list {
+            margin-top: 30px;
+        }
+
+        .alarm-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .alarm-info {
+            flex: 1;
+        }
+
+        .alarm-info strong {
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .alarm-actions button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 5px;
+        }
+
+        .alarm-actions button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .notification-message {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .notification-close:hover {
+            color: #333;
+        }
+
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .alarm-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .alarm-actions button {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌸 Peduli Kanker Indonesia 🌸</h1>
+            <p>Bersama Melawan Kanker dengan Informasi dan Dukungan</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('home')">🏠 Beranda</a></li>
+                <li><a href="#" onclick="showSection('cara-mengatasi')">💪 Cara Mengatasi</a></li>
+                <li><a href="#" onclick="showSection('cara-menghindari')">🛡️ Cara Menghindari</a></li>
+                <li><a href="#" onclick="showSection('makanan-gizi')">🥗 Makanan Bergizi</a></li>
+                <li><a href="#" onclick="showSection('alarm')">⏰ Alarm Obat</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <!-- Beranda -->
+            <div id="home" class="section active">
+                <div class="info-card">
+                    <h2>Selamat Datang di Aplikasi Peduli Kanker</h2>
+                    <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                        Aplikasi ini didedikasikan untuk membantu pasien kanker dan keluarga dalam menghadapi perjalanan melawan kanker. 
+                        Kami menyediakan informasi komprehensif tentang penanganan, pencegahan, dan pola makan sehat, serta fitur pengingat 
+                        minum obat untuk mendukung kepatuhan pengobatan.
+                    </p>
+                    
+                    <h3>Mengapa Aplikasi Ini Penting?</h3>
+                    <ul>
+                        <li>💡 Informasi akurat tentang penanganan kanker dari sumber terpercaya</li>
+                        <li>🥗 Panduan makanan bergizi untuk meningkatkan kualitas hidup</li>
+                        <li>⏰ Fitur pengingat minum obat untuk mendukung kesembuhan</li>
+                        <li>🤝 Dukungan moral dan motivasi untuk tetap semangat</li>
+                    </ul>
+
+                    <h3>Statistik Kanker di Indonesia</h3>
+                    <ul>
+                        <li>📊 Kanker payudara: 16.7% dari total kasus kanker</li>
+                        <li>📊 Kanker serviks: 9.3% dari total kasus kanker</li>
+                        <li>📊 Kanker paru: 8.6% dari total kasus kanker</li>
+                        <li>📊 Kanker hati: 5.4% dari total kasus kanker</li>
+                    </ul>
+                </div>
+
+                <div class="grid-3">
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">💪</div>
+                        <h4>Cara Mengatasi</h4>
+                        <p>Informasi lengkap tentang pengobatan medis, terapi pendukung, dan manajemen efek samping kanker</p>
+                    </div>
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🛡️</div>
+                        <h4>Cara Menghindari</h4>
+                        <p>Tips pencegahan kanker melalui gaya hidup sehat dan deteksi dini</p>
+                    </div>
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🥗</div>
+                        <h4>Makanan Bergizi</h4>
+                        <p>Panduan makanan sehat untuk pasien kanker dan keluarga</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cara Mengatasi -->
+            <div id="cara-mengatasi" class="section">
+                <div class="info-card">
+                    <h2>Cara Mengatasi Kanker</h2>
+                    
+                    <h3>1. Pengobatan Medis</h3>
+                    <ul>
+                        <li><strong>Kemoterapi:</strong> Penggunaan obat-obatan untuk membunuh sel kanker</li>
+                        <li><strong>Radioterapi:</strong> Penggunaan sinar radiasi untuk menghancurkan sel kanker</li>
+                        <li><strong>Operasi:</strong> Pengangkatan jaringan kanker melalui prosedur bedah</li>
+                        <li><strong>Imunoterapi:</strong> Meningkatkan sistem kekebalan tubuh untuk melawan kanker</li>
+                        <li><strong>Terapi Target:</strong> Pengobatan yang menargetkan perubahan spesifik dalam sel kanker</li>
+                        <li><strong>Hormon Terapi:</strong> Untuk kanker yang sensitif terhadap hormon</li>
+                    </ul>
+
+                    <h3>2. Manajemen Efek Samping</h3>
+                    <ul>
+                        <li>🌡️ Mengatasi mual dan muntah dengan obat antiemetik</li>
+                        <li>💪 Mengatasi kelelahan dengan istirahat cukup dan olahraga ringan</li>
+                        <li>🍽️ Mengatasi masalah nafsu makan dengan makanan tinggi kalori</li>
+                        <li>🦷 Merawat mulut untuk mencegah sariawan akibat kemoterapi</li>
+                        <li>💇‍♀️ Mengelola rambut rontok dengan wig atau penutup kepala</li>
+                    </ul>
+
+                    <h3>3. Dukungan Psikologis</h3>
+                    <ul>
+                        <li>🧘 Konseling dengan psikolog onkologi</li>
+                        <li>👥 Bergabung dengan kelompok dukungan sesama pasien kanker</li>
+                        <li>🏡 Dukungan keluarga dan orang terdekat</li>
+                        <li>📿 Terapi spiritual dan meditasi</li>
+                    </ul>
+
+                    <h3>4. Terapi Pendukung</h3>
+                    <ul>
+                        <li>💆 Akupunktur untuk mengurangi nyeri</li>
+                        <li>🎵 Terapi musik untuk relaksasi</li>
+                        <li>🧘 Yoga dan meditasi untuk mengurangi stres</li>
+                        <li>💊 Suplemen sesuai anjuran dokter</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cara Menghindari -->
+            <div id="cara-menghindari" class="section">
+                <div class="info-card">
+                    <h2>Cara Menghindari Kanker</h2>
+                    
+                    <h3>1. Pola Hidup Sehat</h3>
+                    <ul>
+                        <li>🚭 Berhenti merokok dan hindari asap rokok</li>
+                        <li>🍷 Batasi konsumsi alkohol</li>
+                        <li>🏃 Olahraga teratur minimal 30 menit per hari</li>
+                        <li>⚖️ Jaga berat badan ideal</li>
+                        <li>😴 Istirahat cukup 7-8 jam per hari</li>
+                    </ul>
+
+                    <h3>2. Pola Makan Sehat</h3>
+                    <ul>
+                        <li>🥦 Perbanyak konsumsi sayur dan buah</li>
+                        <li>🌾 Konsumsi makanan tinggi serat</li>
+                        <li>🥩 Batasi daging merah dan olahan</li>
+                        <li>🧂 Kurangi makanan asin dan berpengawet</li>
+                        <li>🚫 Hindari makanan bakar/gosong</li>
+                    </ul>
+
+                    <h3>3. Deteksi Dini</h3>
+                    <ul>
+                        <li>🩺 SADARI (Pemeriksaan Payudara Sendiri) setiap bulan</li>
+                        <li>🔬 Pap smear rutin untuk deteksi kanker serviks</li>
+                        <li>🫁 Tes HPV untuk deteksi dini kanker serviks</li>
+                        <li>🩻 Mammografi untuk wanita di atas 40 tahun</li>
+                        <li>💩 Tes darah samar tinja untuk deteksi kanker usus</li>
+                    </ul>
+
+                    <h3>4. Faktor Lingkungan</h3>
+                    <ul>
+                        <li>☀️ Hindari paparan sinar UV berlebihan</li>
+                        <li>🧪 Gunakan alat pelindung saat bekerja dengan bahan kimia</li>
+                        <li>🏠 Pastikan ventilasi rumah baik</li>
+                        <li>💉 Lakukan vaksinasi hepatitis B dan HPV</li>
+                    </ul>
+
+                    <h3>5. Faktor Risiko yang Perlu Diwaspadai</h3>
+                    <ul>
+                        <li>👨‍👩‍👧 Riwayat kanker dalam keluarga</li>
+                        <li>📅 Usia di atas 50 tahun</li>
+                        <li>💊 Penggunaan hormon jangka panjang</li>
+                        <li>🦠 Infeksi virus tertentu (HPV, Hepatitis B, EBV)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Makanan Bergizi -->
+            <div id="makanan-gizi" class="section">
+                <div class="info-card">
+                    <h2>Makanan Bergizi untuk Pasien Kanker</h2>
+                    
+                    <h3>Prinsip Dasar Nutrisi Pasien Kanker</h3>
+                    <ul>
+                        <li>🍚 Tinggi kalori dan protein untuk mencegah wasting</li>
+                        <li>🥚 Mudah dicerna untuk mengurangi beban pencernaan</li>
+                        <li>🍎 Kaya antioksidan untuk melawan radikal bebas</li>
+                        <li>💧 Cukup cairan untuk mencegah dehidrasi</li>
+                        <li>🧂 Rendah garam untuk mencegah retensi cairan</li>
+                    </ul>
+                </div>
+
+                <div class="grid-3">
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🥦</div>
+                        <h4>Sayuran Hijau</h4>
+                        <p>Brokoli, bayam, kale mengandung sulforaphane dan antioksidan yang membantu melawan sel kanker</p>
+                    </div>
+
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🍅</div>
+                        <h4>Buah Berwarna</h4>
+                        <p>Tomat, wortel, pepaya kaya likopen dan beta karoten untuk meningkatkan imunitas</p>
+                    </div>
+
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🫐</div>
+                        <h4>Buah Berry</h4>
+                        <p>Blueberry, stroberi, raspberry tinggi antioksidan dan vitamin C</p>
+                    </div>
+
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🐟</div>
+                        <h4>Ikan Berlemak</h4>
+                        <p>Salmon, tuna, sarden kaya omega-3 yang bersifat anti-inflamasi</p>
+                    </div>
+
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🥜</div>
+                        <h4>Kacang-kacangan</h4>
+                        <p>Kenari, almond, kacang merah sumber protein nabati dan serat</p>
+                    </div>
+
+                    <div class="nutrition-item">
+                        <div style="font-size: 3em;">🍵</div>
+                        <h4>Teh Hijau</h4>
+                        <p>Mengandung polifenol dan EGCG yang dapat menghambat pertumbuhan sel kanker</p>
+                    </div>
+                </div>
+
+                <div class="info-card" style="margin-top: 25px;">
+                    <h3>Contoh Menu Harian untuk Pasien Kanker</h3>
+                    <ul>
+                        <li><strong>Pagi:</strong> Bubur ayam dengan tambahan brokoli dan wortel</li>
+                        <li><strong>Snack:</strong> Smoothie buah berry dengan yogurt</li>
+                        <li><strong>Siang:</strong> Nasi merah, ikan kukus, sup sayuran</li>
+                        <li><strong>Snack:</strong> Jus tomat dan alpukat</li>
+                        <li><strong>Malam:</strong> Bubur kacang hijau dengan susu</li>
+                    </ul>
+
+                    <h3 style="margin-top: 20px;">Makanan yang Perlu Dihindari</h3>
+                    <ul>
+                        <li>🚫 Makanan olahan dan berpengawet</li>
+                        <li>🚫 Daging merah berlebihan</li>
+                        <li>🚫 Makanan tinggi gula</li>
+                        <li>🚫 Alkohol</li>
+                        <li>🚫 Makanan yang terlalu pedas dan asam</li>
+                        <li>🚫 Makanan mentah (untuk pasien dengan imun lemah)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Alarm Obat -->
+            <div id="alarm" class="section">
+                <div class="alarm-section">
+                    <h2 style="text-align: center;">⏰ Pengingat Minum Obat</h2>
+                    <p style="text-align: center; margin-bottom: 30px;">Atur jadwal minum obat Anda untuk memastikan kepatuhan pengobatan</p>
+
+                    <div class="alarm-form">
+                        <h3 style="margin-bottom: 20px;">Tambah Pengingat Baru</h3>
+                        <div class="form-group">
+                            <label>Nama Obat:</label>
+                            <input type="text" id="namaObat" placeholder="Contoh: Obat Kemoterapi, Vitamin, dll">
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Minum:</label>
+                            <input type="time" id="waktuMinum">
+                        </div>
+                        <div class="form-group">
+                            <label>Frekuensi:</label>
+                            <select id="frekuensi">
+                                <option value="setiap hari">Setiap Hari</option>
+                                <option value="setiap 2 hari">Setiap 2 Hari</option>
+                                <option value="setiap minggu">Setiap Minggu</option>
+                                <option value="sesuai jadwal dokter">Sesuai Jadwal Dokter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Dosis:</label>
+                            <input type="text" id="dosis" placeholder="Contoh: 1 tablet, 5 ml, dll">
+                        </div>
+                        <button class="btn" onclick="tambahAlarm()">Tambah Pengingat</button>
+                    </div>
+
+                    <div class="alarm-list">
+                        <h3 style="margin-bottom: 20px;">Daftar Pengingat Aktif</h3>
+                        <div id="daftarAlarm">
+                            <!-- Alarm akan ditampilkan di sini -->
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <p class="alarm-info">
+                            <strong>Tips:</strong> Pastikan browser Anda mengizinkan notifikasi untuk mendapatkan pengingat
+                        </p>
+                        <button class="btn" onclick="mintaIzinNotifikasi()">Aktifkan Notifikasi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 Aplikasi Peduli Kanker Indonesia | Dibuat untuk mendukung pasien kanker dan keluarga</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">*Konsultasikan selalu dengan dokter untuk penanganan yang tepat</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <div class="notification-icon">✓</div>
+            <div class="notification-message" id="notificationMessage"></div>
+            <button class="notification-close" onclick="tutupNotifikasi()">✕</button>
+        </div>
+    </div>
+
+    <script>
+        // Data alarm
+        let alarms = JSON.parse(localStorage.getItem('alarms')) || [];
+
+        // Fungsi untuk menampilkan section
+        function showSection(sectionId) {
+            // Sembunyikan semua section
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Tampilkan section yang dipilih
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Scroll ke atas
+            window.scrollTo(0, 0);
+            
+            // Update daftar alarm jika section alarm yang dibuka
+            if (sectionId === 'alarm') {
+                tampilkanDaftarAlarm();
+            }
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function tampilkanNotifikasi(pesan, isPengingat = false) {
+            const notification = document.getElementById('notification');
+            const message = document.getElementById('notificationMessage');
+            
+            if (isPengingat) {
+                message.innerHTML = `⏰ PENGINGAT: ${pesan}`;
+                notification.style.background = '#f8d7da';
+                notification.style.borderLeft = '5px solid #dc3545';
+            } else {
+                message.textContent = pesan;
+                notification.style.background = 'white';
+                notification.style.borderLeft = '5px solid #28a745';
+            }
+            
+            notification.classList.add('show');
+            
+            // Auto close setelah 5 detik
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        function tutupNotifikasi() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        // Fungsi untuk meminta izin notifikasi
+        function mintaIzinNotifikasi() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        tampilkanNotifikasi('Notifikasi diaktifkan! Anda akan mendapat pengingat minum obat');
+                    } else {
+                        alert('Izin notifikasi ditolak. Aktifkan melalui pengaturan browser untuk mendapat pengingat');
+                    }
+                });
+            } else {
+                alert('Browser Anda tidak mendukung notifikasi');
+            }
+        }
+
+        // Fungsi untuk menambah alarm
+        function tambahAlarm() {
+            const namaObat = document.getElementById('namaObat').value;
+            const waktuMinum = document.getElementById('waktuMinum').value;
+            const frekuensi = document.getElementById('frekuensi').value;
+            const dosis = document.getElementById('dosis').value;
+
+            if (!namaObat || !waktuMinum || !frekuensi || !dosis) {
+                tampilkanNotifikasi('Mohon lengkapi semua data!');
+                return;
+            }
+
+            const alarm = {
+                id: Date.now(),
+                namaObat: namaObat,
+                waktuMinum: waktuMinum,
+                frekuensi: frekuensi,
+                dosis: dosis,
+                aktif: true,
+                dibuat: new Date().toLocaleString('id-ID')
+            };
+
+            alarms.push(alarm);
+            localStorage.setItem('alarms', JSON.stringify(alarms));
+            
+            tampilkanNotifikasi('Pengingat berhasil ditambahkan!');
+            tampilkanDaftarAlarm();
+            
+            // Reset form
+            document.getElementById('namaObat').value = '';
+            document.getElementById('waktuMinum').value = '';
+            document.getElementById('frekuensi').value = 'setiap hari';
+            document.getElementById('dosis').value = '';
+
+            // Set timeout untuk pengingat
+            setAlarmTimeout(alarm);
+        }
+
+        // Fungsi untuk menampilkan daftar alarm
+        function tampilkanDaftarAlarm() {
+            const daftarAlarm = document.getElementById('daftarAlarm');
+            
+            if (alarms.length === 0) {
+                daftarAlarm.innerHTML = '<p style="text-align: center; padding: 20px;">Belum ada pengingat yang ditambahkan</p>';
+                return;
+            }
+
+            daftarAlarm.innerHTML = alarms.map(alarm => `
+                <div class="alarm-item" id="alarm-${alarm.id}">
+                    <div class="alarm-info">
+                        <strong>${alarm.namaObat}</strong>
+                        <p>⏰ Waktu: ${alarm.waktuMinum} | ${alarm.frekuensi}</p>
+                        <p>💊 Dosis: ${alarm.dosis}</p>
+                        <p>📅 Dibuat: ${alarm.dibuat}</p>
+                    </div>
+                    <div class="alarm-actions">
+                        <button onclick="nonaktifkanAlarm(${alarm.id})" title="Nonaktifkan">⏸️</button>
+                        <button onclick="hapusAlarm(${alarm.id})" title="Hapus">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fungsi untuk menonaktifkan alarm
+        function nonaktifkanAlarm(id) {
+            alarms = alarms.map(alarm => {
+                if (alarm.id === id) {
+                    alarm.aktif = !alarm.aktif;
+                }
+                return alarm;
+            });
+            
+            localStorage.setItem('alarms', JSON.stringify(alarms));
+            tampilkanDaftarAlarm();
+            tampilkanNotifikasi('Status alarm diperbarui');
+        }
+
+        // Fungsi untuk menghapus alarm
+        function hapusAlarm(id) {
+            alarms = alarms.filter(alarm => alarm.id !== id);
+            localStorage.setItem('alarms', JSON.stringify(alarms));
+            tampilkanDaftarAlarm();
+            tampilkanNotifikasi('Pengingat dihapus');
+        }
+
+        // Fungsi untuk mengatur timeout alarm
+        function setAlarmTimeout(alarm) {
+            if (!alarm.aktif) return;
+
+            const now = new Date();
+            const [jam, menit] = alarm.waktuMinum.split(':');
+            const alarmTime = new Date();
+            alarmTime.setHours(parseInt(jam), parseInt(menit), 0);
+
+            // Jika waktu sudah lewat, set untuk besok
+            if (alarmTime < now) {
+                alarmTime.setDate(alarmTime.getDate() + 1);
+            }
+
+            const waktuTunggu = alarmTime - now;
+
+            setTimeout(() => {
+                if (alarm.aktif) {
+                    // Tampilkan notifikasi di halaman
+                    tampilkanNotifikasi(`Waktu minum obat ${alarm.namaObat} (${alarm.dosis})`, true);
+                    
+                    // Tampilkan notifikasi sistem jika diizinkan
+                    if (Notification.permission === 'granted') {
+                        new Notification('💊 Pengingat Minum Obat', {
+                            body: `Waktunya minum ${alarm.namaObat} - ${alarm.dosis}`,
+                            icon: 'https://via.placeholder.com/100/28a745/ffffff?text=💊',
+                            tag: alarm.id
+                        });
+                    }
+                    
+                    // Set untuk hari berikutnya
+                    setAlarmTimeout(alarm);
+                }
+            }, waktuTunggu);
+        }
+
+        // Inisialisasi semua alarm saat halaman dimuat
+        window.onload = function() {
+            tampilkanDaftarAlarm();
+            alarms.forEach(alarm => setAlarmTimeout(alarm));
+            
+            // Minta izin notifikasi
+            if ('Notification' in window && Notification.permission === 'default') {
+                mintaIzinNotifikasi();
+            }
+        };
+
+        // Fungsi untuk navigasi menggunakan keyboard
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                tutupNotifikasi();
+            }
+        });
+
+        // Smooth scroll untuk anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
